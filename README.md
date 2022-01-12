@@ -3,7 +3,7 @@ A simple firefox extension for downloading APKs from [myket.ir](https://myket.ir
 
 ### Screenshot
 
-![screenshot](screenshots/1.jpg)
+![screenshot](screenshots/screenshot.png)
 
 ### Install
 
