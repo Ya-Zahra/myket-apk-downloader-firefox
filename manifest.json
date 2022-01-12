@@ -1,0 +1,39 @@
+{
+    "name": "APK Downloader for Myket.ir",
+    "version": "0.0.1",
+    "manifest_version": 2,
+    "description": "Generate APK direct download links for myket.ir Android app store apps",
+
+    "icons": {
+         "48": "icons/48.png",
+         "96": "icons/96.png"
+    },
+
+    "background": {
+        "page": "src/background.html"
+    },
+
+  "content_scripts": [
+    {
+      "matches": [
+        "*://myket.ir/app/*"
+      ],
+      "js": [
+        "/src/injectScript.js"
+      ],
+	  "run_at" : "document_end"
+    }
+  ],
+    "permissions": [
+		"https://myket.ir/app/*",
+		"https://apiserver.myket.ir/*"
+    ],
+	
+	"browser_specific_settings": {
+		"gecko": {
+			"id": "myket_apk_direct_link@ya.zahra",
+			"strict_min_version": "54.0"
+		}
+}
+
+}
