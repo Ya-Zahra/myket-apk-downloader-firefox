@@ -7,7 +7,7 @@ A simple firefox extension for downloading APKs from [myket.ir](https://myket.ir
 
 ### Install
 
-Add-ons for Firefox: https://addons.mozilla.org/en-US/firefox/addon/myket-apk-downloader/
+~~Add-ons for Firefox: https://addons.mozilla.org/en-US/firefox/addon/myket-apk-downloader/~~
 
 or from here
 
