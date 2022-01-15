@@ -11,7 +11,7 @@ A simple firefox extension for downloading APKs from [myket.ir](https://myket.ir
 
 or from here
 
-[Github - Releases](releases/latest)
+[Github - Releases](releases)
 
 ### Known issues
 
