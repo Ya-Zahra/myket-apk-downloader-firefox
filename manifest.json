@@ -1,16 +1,12 @@
 {
     "name": "APK Downloader for Myket.ir",
-    "version": "0.0.1",
+    "version": "0.0.5",
     "manifest_version": 2,
-    "description": "Generate APK direct download links for myket.ir Android app store apps",
+    "description": "Generate direct link to the apk files for Myket.ir app store",
 
     "icons": {
          "48": "icons/48.png",
          "96": "icons/96.png"
-    },
-
-    "background": {
-        "page": "src/background.html"
     },
 
   "content_scripts": [
