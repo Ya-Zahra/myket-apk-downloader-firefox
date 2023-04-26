@@ -11,6 +11,6 @@ Add-ons for Firefox: https://addons.mozilla.org/en-US/firefox/addon/myket-apk-do
 
 ### Known issues
 
-1. You can't select the `SDK` version, it's hardcoded to value `17`! (Jelly Bean 4.2.x and above)
-2. You can't select the `CPU` architecture, it's hardcoded to value `armeabi-v7a,armeabi`!
+1. You can't select the `SDK` version, it's hardcoded
+2. You can't select the `CPU` architecture, it's hardcoded
 3. You can't download applications you've bought!
