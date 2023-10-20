@@ -21,13 +21,13 @@ This work is Islamware.
 I want you to study about the pure Islam
 of Muhammad(Blessings of God be upon him
 and his progeny and grant him peace) and
-if you fint and consider that compatible
+if you find and consider that compatible
 with the pure human nature,accept it and
 also recommend it to others. By becoming
 a member of this community, you make the
-world, real place to live and get closer
+world, place to real live and get closer
 to God.
 
 The source code of this work is released
-under the MPL license.
+under the MPL 2.0 license.
 </pre>
