@@ -1,35 +1,45 @@
 {
     "name": "APK Downloader for Myket.ir",
-    "version": "0.0.5",
+    "version": "0.0.6",
+    "author": "Ya Zahra <https://github.com/Ya-Zahra>",
     "manifest_version": 2,
     "description": "Generate direct link to the apk files for Myket.ir app store",
 
     "icons": {
-         "48": "icons/48.png",
-         "96": "icons/96.png"
+		"48": "icons/48.png",
+		"96": "icons/96.png"
     },
 
-  "content_scripts": [
-    {
-      "matches": [
-        "*://myket.ir/app/*"
-      ],
-      "js": [
-        "/src/injectScript.js"
-      ],
-	  "run_at" : "document_end"
-    }
-  ],
-    "permissions": [
-		"https://myket.ir/app/*",
-		"https://apiserver.myket.ir/*"
+    "content_scripts": [{
+            "matches": [
+                "*://myket.ir/app/*"
+            ],
+            "js": [
+                "src/injectScript.js"
+            ],
+            "run_at": "document_end"
+        }
     ],
-	
-	"browser_specific_settings": {
-		"gecko": {
-			"id": "myket_apk_direct_link@ya.zahra",
-			"strict_min_version": "54.0"
-		}
-}
+    "options_ui": {
+        "page": "src/options.html",
+        "browser_style": true
+    },
+    "background": {
+        "scripts": ["src/background.js"]
+    },
+    "browser_action": {
+        "default_title": "APK Downloader for Myket option"
+    },	
+    "permissions": [
+        "storage",
+        "https://myket.ir/app/*",
+        "https://apiserver.myket.ir/*"
+    ],
 
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "myket_apk_direct_link@ya.zahra",
+            "strict_min_version": "57.0"
+        }
+    }
 }

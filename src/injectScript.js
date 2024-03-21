@@ -1,3 +1,4 @@
+/* global browser */
 
 // MAD : Myket Apk Downloader
 // APK Downloader for Myket.ir
@@ -5,37 +6,41 @@
 // MPL-2.0 license
 
 //disable or enable devMode here
-const _devMode = false;
+_devMode = true;
+
+// Logs anything on Developer Mode
 function l(_msg) {
     if (_devMode)
         console.log('MAD:', _msg);
 }
+
 if (!_devMode)
     console.log('MAD: end-user mode');
+
 (() => {
     l('started');
     ('use strict');
-    const _authItemName = 'MyketAuth',
-    _apiURL = 'https://apiserver.myket.ir',
-    _downloadButtonTitle = '\n*** شادی روح امام و شهدا صلوات ***',
-    _applicationsVer1URL = `${_apiURL}/v1/applications`,
-    _applicationsVer2URL = `${_apiURL}/v2/applications`,
-    _authorizeURL = `${_apiURL}/v1/devices/authorize/`,
-    _Headers = {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        'Myket-Version': '914',
-        Authorization: '',
-        'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android x.x; xxxx Build/xxxxxx)',
-        Host: 'apiserver.myket.ir',
-        Connection: 'Keep-Alive',
-        'Accept-Encoding': 'gzip',
-    },
-    _authorizeRequest = {
-        mode: 'cors',
-        headers: _Headers,
-        method: 'POST',
-        body: JSON.stringify({
+
+    const _authItem = 'MyketAuthApi',
+        _apiURL = 'https://apiserver.myket.ir',
+        _downloadButtonTitle = '\n*** شادی روح امام و شهدا صلوات ***',
+        _applicationsVer1URL = `${_apiURL}/v1/applications`,
+        _applicationsVer2URL = `${_apiURL}/v2/applications`,
+        _authorizeURL = `${_apiURL}/v1/devices/authorize/`,
+        _defSett = {
+            apiLevel: '17'
+        },
+        _Headers = {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            'Myket-Version': '914',
+            Authorization: '',
+            'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android x.x; xxxx Build/xxxxxx)',
+            Host: 'apiserver.myket.ir',
+            Connection: 'Keep-Alive',
+            'Accept-Encoding': 'gzip'
+        },
+        _authorizeBody = {
             acId: '',
             acKey: '',
             adId: '82d8810f-e83c-46c0-8bf5-080a83d635c6',
@@ -54,25 +59,36 @@ if (!_devMode)
             manufacturer: 'GnuSmas',
             product: 'GnuSmas_WWW',
             supportedAbis: ['arm64-v8a', 'armeabi-v7a', 'armeabi'],
-            uuid: 'b31f07f1-60fd-489b-9d14-66187834a131',
-        }),
-    },
-    _appInfoRequset = {
-        mode: 'cors',
-        method: 'GET',
-        headers: _Headers
-    };
+            uuid: 'b31f07f1-60fd-489b-9d14-66187834a131'
+        },
+        _authorizeRequest = {
+            mode: 'cors',
+            headers: _Headers,
+            method: 'POST',
+            body: ''
+        },
+        _appInfoRequset = {
+            mode: 'cors',
+            method: 'GET',
+            headers: _Headers
+        };
+
     async function getAuthFunc(tryNewAuth = false) {
         l('get Auth func');
         var _oldAuth;
-        _oldAuth = localStorage.getItem(_authItemName);
+        var _allItems = await browser.storage.local.get(_defSett);
+        l(_allItems);
+        _oldAuth = _allItems[_authItem + _allItems.apiLevel];
+            l(_oldAuth);
         if (_oldAuth && !tryNewAuth) {
             l('Auth already exist & tryNewAuth is false');
             l(_oldAuth);
             _Headers.Authorization = _oldAuth;
-            return void(0);
+            return void (0);
         }
-        l('get Auth func - fetching');
+        _authorizeBody.api = _allItems.apiLevel;
+        _authorizeRequest.body = JSON.stringify(_authorizeBody);
+        l('get Auth func - fetching - API is ' + _authorizeBody.api);
         const _authorizeResponse = await fetch(_authorizeURL, _authorizeRequest);
         if (!_authorizeResponse.ok) {
             const {
@@ -85,8 +101,16 @@ if (!_devMode)
             token: _authorizeToken
         } = await _authorizeResponse.json();
         l('get Auth func - saving Auth ' + _authorizeToken);
-        localStorage.setItem(_authItemName, _authorizeToken);
+		
+        browser.storage.local.set({ [_authItem + _allItems.apiLevel]: _authorizeToken }).then(() => {
+            l('saved');
+        }, (err) => {
+            l(err);
+        });
+        _Headers.Authorization = _authorizeToken;
+
     }
+
     async function getPkgInfoFunc(_pkgNameLocal) {
         l('get pkg info - "package" is ' + _pkgNameLocal);
         const _getPkgInfoURL_Local = `${_applicationsVer2URL}/${_pkgNameLocal}/`;
@@ -98,7 +122,7 @@ if (!_devMode)
             l('fetch err:' + _getPkgInfoURL_Local);
             l(_appInfoRequset);
             l('response is');
-            l(pkgInfoFetchResponse);
+            l(_pkgInfoFetchResponse);
             if (401 !== _pkgInfoFetchResponse.status) {
                 l('401 !== response.status');
                 throw new Error('Request failure.');
@@ -113,53 +137,58 @@ if (!_devMode)
         l(_pkgInfoJson);
         return _pkgInfoJson;
     }
-    var _btnSelector;
-    ((_btnSelector = 'a.btn-download'), new Promise(resolveFunc => {
-            l('new Promise - searching for:' + _btnSelector);
-            let _btnElement = document.querySelector(_btnSelector);
-            if (_btnElement) {
-                l('found without wait');
-                return resolveFunc(_btnElement);
+
+    const _btnSelector = 'a.btn-download';
+    let _findBtnPromise = new Promise(resolveFunc => {
+        l('new Promise - searching for:' + _btnSelector);
+        let _btnElement = document.querySelector(_btnSelector);
+        if (_btnElement) {
+            l('found without wait');
+            return resolveFunc(_btnElement);
+        }
+        l('waiting for ' + _btnSelector + ' - MutationObserver');
+        const _pageBodyObserver = new MutationObserver(MutationCallback => {
+            var _btnDownload;
+            _btnDownload = document.querySelector(_btnSelector);
+            if (_btnDownload) {
+                l('found with wait');
+                _pageBodyObserver.disconnect();
+                return resolveFunc(_btnDownload);
             }
-            l('waiting for ' + _btnSelector + ' - MutationObserver');
-            const _pageBodyObserver = new MutationObserver(MutationCallback => {
-                var _btnDownload;
-                _btnDownload = document.querySelector(_btnSelector);
-                if (_btnDownload) {
-                    l('found with wait');
-                    _pageBodyObserver.disconnect();
-                    return resolveFunc(_btnDownload);
-                }
-            });
-            _pageBodyObserver.observe(document.body, {
-                childList: true,
-                subtree: true
-            });
-        })).then(async function (_downloadBtn) {
+        });
+        _pageBodyObserver.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    });
+    _findBtnPromise.then(async function (_downloadBtn) {
         const _baseBtn = document.getElementById('basebtn'),
-        _baseBtnMob = document.getElementById('basebtnmob');
+            _baseBtnMob = document.getElementById('basebtnmob');
         if (_baseBtn)
             try {
                 await getAuthFunc();
                 const _pkgName = new URL(_downloadBtn.getAttribute('href')).searchParams.get('packageName'),
-                _pkgInfoData = await getPkgInfoFunc(_pkgName);
+                    _pkgInfoData = await getPkgInfoFunc(_pkgName);
                 if (!_pkgInfoData.price.isFree) {
                     l('Paid App!');
                     _baseBtn.textContent = 'برنامه پولی';
                     return;
                 }
-                const _downloadURL = await(async function (_requestedVer, _requestedPkg) {
+                const _downloadURL = await (async function (_requestedVer, _requestedPkg) {
+					l('requestedVer:' + _requestedVer);
+					//_requestedVer = 24510;
                     const _getDownloadLinkStart = `${_applicationsVer1URL}/${_requestedPkg}/uri/?` +
                         new URLSearchParams({
                             action: 'start',
                             requestedVersion: _requestedVer,
                             fileType: 'App',
-                            lang: 'fa',
+                            lang: 'fa'
                         }).toString(),
-                    _appInfoResponse = await fetch(_getDownloadLinkStart, _appInfoRequset), {
-                        uriPath: _uriPath,
-                        uriServers: _serverList
-                    } = await _appInfoResponse.json();
+                        _appInfoResponse = await fetch(_getDownloadLinkStart, _appInfoRequset)
+                        , {
+                            uriPath: _uriPath,
+                            uriServers: _serverList
+                        } = await _appInfoResponse.json();
                     if (!_uriPath)
                         throw new Error('No download link.');
                     l('random server - total servers :' + _serverList.length);
@@ -176,10 +205,10 @@ if (!_devMode)
                 }
                 _downloadBtn.removeAttribute('onclick');
                 _downloadBtn.setAttribute('href', _downloadURL);
-                _baseBtn.textContent = `دانلود (${_pkgInfoData.size.actual})`;
+                _baseBtn.textContent = `⬇️ دانلود (${_pkgInfoData.size.actual})`;
                 _downloadBtn.title += _downloadButtonTitle;
                 if (_baseBtnMob) {
-                    _baseBtnMob.textContent = 'دانلود';
+                    _baseBtnMob.textContent = '⬇️ دانلود';
                 }
             } catch (_err) {
                 _downloadBtn.setAttribute('href', '#');

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Options</title>
+    <meta charset="utf-8">
+</head>
+
+<body>
+    <p>Is auth stored ? <b id="saved-auth">no value found</b>
+    </p>
+    <form>
+        <label for="apiLevel">Choose SDK&#47;API Level: </label>
+        <select name="apiLevel" id="apiLevel">
+            <optgroup label="Recommanded">
+                <option value="17">17: Jelly Bean 4.2.x</option>
+            </optgroup>
+            <optgroup label="Popular">
+                <option value="16">16: Jelly Bean 4.1.x</option>
+                <option value="17">17: Jelly Bean 4.2.x</option>
+                <option value="18">18: Jelly Bean 4.3.x</option>
+                <option value="19">19: KitKat 4.4 - 4.4.4</option>
+                <option value="20">20: KitKat 4.4W</option>
+                <option value="21">21: Lollipop 5.0</option>
+                <option value="22">22: Lollipop 5.1</option>
+                <option value="23">23: Marshmallow 6.0</option>
+                <option value="24">24: Nougat 7.0</option>
+            </optgroup>
+            <optgroup label="Old Devices">
+                <option value="15">15: Ice Cream Sandwich 4.0.3 - 4.0.4</option>
+                <option value="14">14: Ice Cream Sandwich 4.0.1 - 4.0.2</option>
+                <option value="13">13: Honeycomb 3.2.x</option>
+                <option value="12">12: Honeycomb 3.1</option>
+                <option value="11">11: Honeycomb 3.0</option>
+                <option value="10">10: Gingerbread 2.3.3 - 2.3.7</option>
+                <option value="9">9: Gingerbread 2.3 - 2.3.2</option>
+                <option value="8">8: Froyo 2.2.x</option>
+                <option value="7">7: Eclair 2.1</option>
+                <option value="6">6: Eclair 2.0.1</option>
+                <option value="5">5: Eclair 2.0</option>
+                <option value="4">4: Donut 1.6</option>
+                <option value="3">3: Cupcake 1.5</option>
+                <option value="2">2: Android 1.1</option>
+                <option value="1">1: Android 1.0</option>
+            </optgroup>
+        </select>
+        <br />
+        <br />
+        <label id="notify" for="submit"></label>
+        <button type="submit" id="submit" name="submit">Save</button>
+    </form>
+    <script src="options.js"></script>
+</body>
+
+</html>
