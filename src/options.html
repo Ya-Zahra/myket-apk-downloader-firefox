@@ -1,54 +1,195 @@
-<!DOCTYPE html>
-<html>
+﻿<!DOCTYPE html>
+<html lang="en">
 
 <head>
-    <title>Options</title>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Myket APK Downloader Settings</title>
+    <style>
+        /* ---------- Reset & Base ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+            margin: 0;
+            direction: ltr;
+        }
+
+        /* ---------- Card Container ---------- */
+        .settings-card {
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            padding: 32px;
+            width: 100%;
+            max-width: 440px;
+            transition: box-shadow 0.2s ease;
+        }
+
+        .settings-card:hover {
+            box-shadow: 0 14px 36px rgba(0, 0, 0, 0.12);
+        }
+
+        h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 28px;
+            text-align: center;
+            letter-spacing: -0.3px;
+        }
+
+        /* ---------- Auth Status Row ---------- */
+        .status-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f8fafc;
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 28px;
+            font-size: 14px;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+        }
+
+        .status-row b {
+            font-weight: 600;
+            color: #1e293b;
+            background: #eef2ff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+
+        /* ---------- Form Styling ---------- */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        label[for="apiLevel"] {
+            font-weight: 600;
+            color: #334155;
+            font-size: 15px;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 14px;
+            background: #ffffff;
+            color: #1e293b;
+            cursor: pointer;
+            transition: border-color 0.2s;
+            outline: none;
+        }
+
+        select:hover {
+            border-color: #94a3b8;
+        }
+
+        select:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        }
+
+        /* ---------- Notification Message ---------- */
+        #notify {
+            display: block;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            color: #16a34a;
+            min-height: 20px;
+            transition: opacity 0.3s;
+        }
+
+        /* ---------- Save Button ---------- */
+        #submit {
+            background: #6366f1;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 15px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            letter-spacing: 0.3px;
+        }
+
+        #submit:hover {
+            background: #4f46e5;
+        }
+
+        #submit:active {
+            transform: scale(0.98);
+        }
+    </style>
 </head>
 
 <body>
-    <p>Is auth stored ? <b id="saved-auth">no value found</b>
-    </p>
-    <form>
-        <label for="apiLevel">Choose SDK&#47;API Level: </label>
-        <select name="apiLevel" id="apiLevel">
-            <optgroup label="Recommanded">
-                <option value="17">17: Jelly Bean 4.2.x</option>
-            </optgroup>
-            <optgroup label="Popular">
-                <option value="16">16: Jelly Bean 4.1.x</option>
-                <option value="17">17: Jelly Bean 4.2.x</option>
-                <option value="18">18: Jelly Bean 4.3.x</option>
-                <option value="19">19: KitKat 4.4 - 4.4.4</option>
-                <option value="20">20: KitKat 4.4W</option>
-                <option value="21">21: Lollipop 5.0</option>
-                <option value="22">22: Lollipop 5.1</option>
-                <option value="23">23: Marshmallow 6.0</option>
-                <option value="24">24: Nougat 7.0</option>
-            </optgroup>
-            <optgroup label="Old Devices">
-                <option value="15">15: Ice Cream Sandwich 4.0.3 - 4.0.4</option>
-                <option value="14">14: Ice Cream Sandwich 4.0.1 - 4.0.2</option>
-                <option value="13">13: Honeycomb 3.2.x</option>
-                <option value="12">12: Honeycomb 3.1</option>
-                <option value="11">11: Honeycomb 3.0</option>
-                <option value="10">10: Gingerbread 2.3.3 - 2.3.7</option>
-                <option value="9">9: Gingerbread 2.3 - 2.3.2</option>
-                <option value="8">8: Froyo 2.2.x</option>
-                <option value="7">7: Eclair 2.1</option>
-                <option value="6">6: Eclair 2.0.1</option>
-                <option value="5">5: Eclair 2.0</option>
-                <option value="4">4: Donut 1.6</option>
-                <option value="3">3: Cupcake 1.5</option>
-                <option value="2">2: Android 1.1</option>
-                <option value="1">1: Android 1.0</option>
-            </optgroup>
-        </select>
-        <br />
-        <br />
-        <label id="notify" for="submit"></label>
-        <button type="submit" id="submit" name="submit">Save</button>
-    </form>
+    <div class="settings-card">
+        <h4>⚙️ APK Downloader for Myket.ir - Settings</h4>
+
+        <div class="status-row">
+            <span>Is auth token saved?</span>
+            <b id="saved-auth">No</b>
+        </div>
+
+        <form>
+            <div>
+                <label for="apiLevel">Choose Android API Level:</label>
+                <select name="apiLevel" id="apiLevel">
+                    <optgroup label="Recommended">
+                        <option value="17">17 – Jelly Bean 4.2.x</option>
+                    </optgroup>
+
+                    <optgroup label="Older / Popular">
+                        <option value="16">16 – Jelly Bean 4.1.x</option>
+                        <option value="18">18 – Jelly Bean 4.3.x</option>
+                        <option value="19">19 – KitKat 4.4 – 4.4.4</option>
+                        <option value="20">20 – KitKat 4.4W</option>
+                        <option value="21">21 – Lollipop 5.0</option>
+                        <option value="22">22 – Lollipop 5.1</option>
+                        <option value="23">23 – Marshmallow 6.0</option>
+                        <option value="24">24 – Nougat 7.0</option>
+                    </optgroup>
+
+                    <optgroup label="Android 7.1+">
+                        <option value="25">25 – Nougat 7.1</option>
+                        <option value="26">26 – Oreo 8.0</option>
+                        <option value="27">27 – Oreo 8.1</option>
+                        <option value="28">28 – Pie 9</option>
+                        <option value="29">29 – Android 10</option>
+                        <option value="30">30 – Android 11</option>
+                        <option value="31">31 – Android 12</option>
+                        <option value="32">32 – Android 12L</option>
+                        <option value="33">33 – Android 13</option>
+                        <option value="34">34 – Android 14</option>
+                    </optgroup>
+                </select>
+            </div>
+
+            <label id="notify" for="submit"></label>
+            <input id="submit" name="submit" type="submit" value="Save">
+        </form>
+    </div>
+
     <script src="options.js"></script>
 </body>
 
